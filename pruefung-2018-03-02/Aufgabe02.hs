@@ -50,9 +50,24 @@ c7 = (ElementHolder 1 (ElementHolder 2 (ElementHolder 1 EmptyTree EmptyTree) Emp
  - Die Elemente der Liste kommen in beliebiger Reihenfolge vor.
  - Geben Sie auch hier eine möglichst allgemeine Deklaration an! -}
 
+c8 = (ElementHolder 1 (ElementHolder 2 EmptyTree (ElementHolder 3 EmptyTree EmptyTree)) EmptyTree) :: (BTree Integer)
+c9 = (ElementHolder 1 (ElementHolder 2 EmptyTree (ElementHolder 3 EmptyTree EmptyTree)) (ElementHolder 4 EmptyTree EmptyTree)) :: (BTree Integer)
 
+trx :: (BTree a -> Bool) -> BTree a -> [(a, (BTree a), (BTree a))]
+trx _ EmptyTree 		= []
+trx f t@(ElementHolder e t1 t2) = [(e,t1,t2)| f t] ++ (trx f t1) ++ (trx f t2)
 
+alwaysTrue :: BTree a -> Bool
+alwaysTrue _ = True
+alwaysFalse :: BTree a -> Bool
+alwaysFalse _ = False
 
+isEmpty :: BTree a -> Bool
+isEmpty EmptyTree = True
+isEmpty _ = False
 
-
-
+hasOneEmptySubtree :: BTree a -> Bool
+hasOneEmptySubtree EmptyTree				= False
+hasOneEmptySubtree (ElementHolder _ _ EmptyTree) 	= True
+hasOneEmptySubtree (ElementHolder _ EmptyTree _) 	= True
+hasOneEmptySubtree _ 					= False
